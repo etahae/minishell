@@ -1,2 +1,3 @@
 # minishell
-Coding a working shell using C language
+
+Coding a working shell using C language.
