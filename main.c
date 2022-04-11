@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:30:16 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/08 23:38:13 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 13:41:45 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	tab_sp_check(char	*input)
 static void	wanna_be_main(t_minishell *minishell)
 {
 	char	*input;
+	char	*wd;
 
 	while (!minishell->exita)
 	{
@@ -61,7 +62,6 @@ static void	wanna_be_main(t_minishell *minishell)
 		if (tab_sp_check(input))
 		{
 			add_history(input);
-			input = rm_early_sp(rm_late_sp(input));
 			if (!metacharacters(input, minishell))
 				conditions(minishell, input);
 		}
@@ -89,5 +89,5 @@ int	main(int c, char **v, char **envp)
 	minishell.p = 0;
 	wanna_be_main(&minishell);
 	// twod_free(minishell.local_env);
-	return (minishell.exit_status);
+	exit(minishell.exit_status);
 }

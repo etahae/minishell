@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 12:05:27 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/08 23:50:42 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/10 23:56:16 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*var_name_func(char *var)
 static int	valid_var_name(char	*var, t_minishell *minish)
 {
 	int		x;
-	char	*var_name;
+	char	*name;
 
 	x = -1;
 	if (!var[0])
@@ -41,18 +41,19 @@ static int	valid_var_name(char	*var, t_minishell *minish)
 		minish->exit_status = 1;
 		return (1);
 	}
-	var_name = var_name_func(var);
-	while (var_name[++x])
+	name = var_name_func(var);
+	while (name[++x])
 	{
-		if (!ft_isalnum(var_name[x]) && var_name[x] != '_'
-			&& var_name[x] != '=')
+		if (!ft_isalnum(name[x]) && name[x] != '_' && name[x] != '=')
 		{
 			ft_putstr_fd("export: not valid in this context: ", 2);
-			ft_putendl_fd(var_name, 2);
+			ft_putendl_fd(name, 2);
 			minish->exit_status = 1;
+			free(name);
 			return (1);
 		}
 	}
+	free(name);
 	return (0);
 }
 
@@ -79,7 +80,6 @@ static char	**export_check(t_minishell *minish, char **local_env)
 			local_env = unset_var(var_name, local_env);
 		}
 		y++;
-		free(var_name);
 	}
 	y = -1;
 	return (local_env);

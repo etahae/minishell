@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 08:57:42 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/09 10:47:12 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/10 17:48:56 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,15 @@ int	check_metacharacters(char *input)
 	return (i);
 }
 
+/////// while x + 1 to increment input after to let it pass spaces
+
+void	pipex(char *input, t_minishell *minish, int *x)
+{
+	pipe_hand(minish, input, *x);
+	while (input[*x + 1] == ' ')
+		*x += 1;
+}
+
 static int	meta_conditions(char *input, t_minishell *minish, int *x)
 {
 	if (input[*x] == '>')
@@ -73,7 +82,7 @@ static int	meta_conditions(char *input, t_minishell *minish, int *x)
 			input = redirect_output(minish, input, *x);
 		if (!input)
 			return (1);
-		*x = 1;
+		*x = -1;
 	}
 	else if (input[*x] == '<')
 	{
@@ -83,14 +92,10 @@ static int	meta_conditions(char *input, t_minishell *minish, int *x)
 			input = redirect_input(minish, input, *x);
 		if (!input)
 			return (1);
-		*x = 1;
+		*x = -1;
 	}
 	else if (input[*x] == '|')
-	{
-		pipe_hand(minish, input, *x);
-		if (input[*x + 1] == ' ')
-			*x += 1;
-	}
+		pipex(input, minish, x);
 	return (0);
 }
 
@@ -98,7 +103,7 @@ int	metacharacters(char *input, t_minishell *minish)
 {
 	int		x;
 
-	(void)minish;
+	input = rm_early_sp(rm_late_sp(input));
 	x = check_metacharacters(input);
 	if (!input[x])
 		return (0);
@@ -118,6 +123,7 @@ int	metacharacters(char *input, t_minishell *minish)
 		else if (meta_conditions(input, minish, &x))
 			return (1);
 		input += x + 1;
+		x++;
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:52:37 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/09 10:44:07 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/09 11:51:27 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	*redirect_output(t_minishell *minish, char *input, int x)
 	minish->p = 1;
 	conditions(minish, cmd);
 	close(minish->w_fd);
+	x++;
 	x = check_metacharacters(input);
 	if (!input[x])
 		return (0);

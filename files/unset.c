@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:29:51 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/08 23:55:41 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/10 23:20:10 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ char	**unset_var(char *var_name, char **local_env)
 		x++;
 	}
 	new_env[x] = 0;
-	twod_free(local_env);  ////////////////////
 	return (new_env);
 }
 
