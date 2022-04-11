@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:30:16 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/11 13:41:45 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 13:44:19 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static int	tab_sp_check(char	*input)
 static void	wanna_be_main(t_minishell *minishell)
 {
 	char	*input;
-	char	*wd;
 
 	while (!minishell->exita)
 	{
