@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 16:41:40 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/09 08:23:14 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 23:46:10 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,40 @@ void	print_error(char *str1, char *str2, t_minishell *minish, int val)
 	minish->exit_status = val;
 }
 
+void	cpy_print_export(t_minishell *minish, int x, int y, int *equal)
+{
+	if (minish->local_env[y][x - 1] == '=')
+	{
+		ft_putchar_fd('\"', minish->w_fd);
+		*equal = 1;
+	}
+	ft_putchar_fd(minish->local_env[y][x], minish->w_fd);
+}
+
 void	print_export(t_minishell *minish)
 {
 	int		y;
+	int		x;
+	int		equal;
 
-	y = 0;
-	while (minish->local_env[y])
+	y = -1;
+	while (minish->local_env[++y])
 	{
+		equal = 0;
+		x = 0;
 		ft_putstr_fd("declare -x ", minish->w_fd);
-		ft_putendl_fd(minish->local_env[y++], minish->w_fd);
+		while (minish->local_env[y][x])
+		{
+			cpy_print_export(minish, x, y, &equal);
+			x++;
+		}
+		if (minish->local_env[y][x - 1] == '=')
+		{
+			ft_putchar_fd('\"', minish->w_fd);
+			equal = 1;
+		}
+		if (equal)
+			ft_putchar_fd('\"', minish->w_fd);
+		ft_putchar_fd('\n', minish->w_fd);
 	}
 }

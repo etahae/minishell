@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:32:40 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/09 11:52:03 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 16:14:43 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int		is_var(char	**local_env, char *var);
 char	**unset_var(char *var_name, char **local_env);
 char	**export(char	**local_env, t_minishell *minish);
 char	**unset(char	**local_env, t_minishell *minish);
+void	ft_exit(t_minishell *minishell);
 
 // metacharachters
 int		metacharacters(char *input, t_minishell *minish);
@@ -73,6 +74,8 @@ char	*redirect_output(t_minishell *minish, char *input, int x);
 char	*redirect_input(t_minishell *minish, char *input, int x);
 char	*redirect_append(t_minishell *minish, char *input, int x);
 char	*delimiter_input(t_minishell *minish, char *input, int x);
+
+char	*output(t_minishell *minish, char *input, int x);
 
 // error handler
 void	print_error(char *str1, char *str2, t_minishell *minish, int val);

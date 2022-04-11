@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:52:37 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/09 11:51:27 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 16:44:55 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*redirect_output(t_minishell *minish, char *input, int x)
 	char	*file_name;
 
 	cmd = ft_substr(input, 0, x);
+	printf("****%s****\n", input);
 	input += x + 1;
 	file_name = one_file_input(rm_late_sp(rm_early_sp(input)));
 	file_name = quotes_handler(ft_substr(file_name, 0,

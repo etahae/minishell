@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 16:30:16 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/11 13:44:19 by tnamir           ###   ########.fr       */
+/*   Created: 2022/04/11 16:05:27 by tnamir            #+#    #+#             */
+/*   Updated: 2022/04/11 16:05:27 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ int	main(int c, char **v, char **envp)
 	minishell.exit_status = 0;
 	minishell.p = 0;
 	wanna_be_main(&minishell);
-	// twod_free(minishell.local_env);
+	twod_free(minishell.local_env);
 	exit(minishell.exit_status);
 }

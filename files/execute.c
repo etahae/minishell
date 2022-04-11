@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 17:04:25 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/09 09:34:52 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 17:01:44 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*check_access(char *cmd, char **all_paths)
 		path = ft_strjoin(all_paths[x], "/");
 		cmd_path = ft_strjoin(path, cmd);
 		free(path);
-		if (!access(cmd_path, F_OK))
+		if (!access(cmd_path, F_OK) && !access(cmd_path, X_OK))
 		{
 			twod_free(all_paths);
 			return (cmd_path);

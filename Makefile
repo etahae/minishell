@@ -6,7 +6,7 @@
 #    By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/15 16:38:27 by tnamir            #+#    #+#              #
-#    Updated: 2022/04/06 22:17:02 by tnamir           ###   ########.fr        #
+#    Updated: 2022/04/11 17:15:06 by tnamir           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,11 @@
 
 HEADER = minishell.h
 
-FLAGS = -Wall -Wextra -Werror -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include -lreadline
+FLAGS = -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include -lreadline
 
 SRC = main.c ./files/execute.c ./files/f_or_d.c ./files/sp_remover.c ./files/quotes_handler.c ./files/builtins_cmds.c \
  ./files/utils.c ./files/env_var.c ./files/cpy.c ./files/export.c ./files/unset.c ./files/pipes.c ./files/redirections.c \
- ./files/metacharacters.c ./files/conditions.c
+ ./files/metacharacters.c ./files/conditions.c ./files/output.c
 
 NAME = minishell
 
@@ -44,9 +44,6 @@ fclean : clean
 	@rm -rf $(LIBFT) $(NAME)
 
 re : fclean all
-
-c : re clean
-	@./minishell
 
 .PHONY : clean fclean re
 

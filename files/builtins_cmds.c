@@ -6,11 +6,29 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:43:00 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/07 23:31:40 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/11 16:53:42 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	ft_exit(t_minishell *minishell)
+{
+	int	x;
+
+	minishell->exita = 1;
+	x = -1;
+	if (minishell->options[1])
+	{
+		while (ft_isdigit(minishell->options[1][++x]))
+			;
+		if (minishell->options[1][x])
+			ft_putendl_fd("minishell: exit: numeric argument required", 2);
+		else
+			minishell->exit_status = ft_atoi(minishell->options[1]);
+	}
+	ft_putstr_fd(RED"exit 💀\033[0m", 1);
+}
 
 void	echo(char	**options, t_minishell *minish)
 {
@@ -62,32 +80,20 @@ void	cd(char *path, t_minishell *minish)
 	if (twod_array_len(minish->options) == 1
 		|| twod_array_len(minish->options) > 2)
 		return (just_cd_error(path, minish));
-	else
+	if (chdir(path) == -1)
 	{
-		if (f_or_d(path) != 'd')
-		{
-			ft_putstr_fd("error: no such file or directory: ", 2);
-			ft_putendl_fd(path, 2);
-			minish->exit_status = 2;
-			return ;
-		}
-		if (access(path, X_OK))
-		{
-			ft_putstr_fd("error: permission denied: ", 2);
-			ft_putendl_fd(path, 2);
-			minish->exit_status = 13;
-			return ;
-		}
+		perror("error");
+		minish->exit_status = 1;
 	}
-	chdir(path);
 }
 
 void	env(char	**env, t_minishell *minish)
 {
 	int	i;
 
+	(void)env;
 	i = -1;
-	while (env[++i])
-		ft_putendl_fd(env[i], minish->w_fd);
+	while (minish->local_env[++i])
+		ft_putendl_fd(minish->local_env[i], minish->w_fd);
 	minish->exit_status = 0;
 }
