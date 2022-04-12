@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 12:55:03 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/11 17:26:18 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/12 14:46:17 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	pipe_hand(t_minishell *minish, char	*input, int x)
 		minish->p += 1;
 	minish->w_fd = fd[1];
 	str = ft_substr(input, 0, x);
-	conditions(minish, str);
+	conditions(minish, rm_early_sp(rm_late_sp(str)));
 	wait(NULL);
 	close(minish->w_fd);
 	minish->w_fd = 1;

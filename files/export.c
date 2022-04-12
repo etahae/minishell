@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 12:05:27 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/11 23:51:45 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/12 14:26:45 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*var_name_func(char *var)
 {
 	int		i;
 	char	*var_name;
+	char	*name;
 
 	i = 0;
 	while (var[i] != '=' && var[i])
@@ -61,6 +62,7 @@ static char	**export_check(t_minishell *minish, char **local_env, int y)
 {
 	int		i;
 	char	*var_name;
+	char	*name;
 
 	var_name = var_name_func(minish->options[y]);
 	if (is_var(local_env, var_name))
@@ -68,9 +70,15 @@ static char	**export_check(t_minishell *minish, char **local_env, int y)
 		if (!ft_strchr(minish->options[y], '='))
 		{
 			i = 0;
+			name = var_name_func(local_env[i]);
 			while (local_env[i] && ft_strncmp(local_env[i], var_name \
-			, ft_strlen(var_name_func(local_env[i]))))
+			, ft_strlen(name)))
+			{
+				free(name);
 				i++;
+				name = var_name_func(local_env[i]);
+			}
+			free(name);
 			minish->options[y] = ft_strdup(local_env[i]);
 		}
 		local_env = unset_var(var_name, local_env);
@@ -87,10 +95,7 @@ char	**local_to_new(t_minishell *minish, char **local_env,
 	x = -1;
 	while (local_env[++x])
 		new_env[x] = local_env[x];
-	if (!(minish->options[y][ft_strlen(minish->options[y]) - 1] == '='))
-		new_env[x] = ft_strdup(minish->options[y]);
-	else
-		new_env[x] = ft_strdup(minish->options[y]);
+	new_env[x] = ft_strdup(minish->options[y]);
 	new_env[++x] = 0;
 	return (new_env);
 }

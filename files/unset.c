@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 11:29:51 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/11 17:44:19 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/12 14:19:39 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 int	is_var(char	**local_env, char *var)
 {
-	int	i;
+	int		i;
+	char	*name;
 
 	i = -1;
 	while (local_env[++i])
 	{
-		if (!ft_strncmp(local_env[i], var,
-				ft_strlen(var_name_func(local_env[i]))))
+		name = var_name_func(local_env[i]);
+		if (!ft_strncmp(local_env[i], var, ft_strlen(name)))
+		{
+			free(name);
 			return (1);
+		}
+		free(name);
 	}
 	return (0);
 }
@@ -41,6 +46,7 @@ char	**unset_var(char *var_name, char **local_env)
 	{
 		if (!ft_strncmp(local_env[i], var_name, len))
 		{
+			free(local_env[i]);
 			i++;
 			continue ;
 		}
