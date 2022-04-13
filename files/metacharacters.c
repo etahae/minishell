@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 08:57:42 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/12 18:00:45 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/13 15:04:26 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	check_metacharacters(char *input)
 	return (i);
 }
 
-///// while x + 1 to increment input after to let it pass spaces
+/////// while x + 1 to increment input after to let it pass spaces
 
 void	pipex(char *input, t_minishell *minish, int *x)
 {
