@@ -6,115 +6,110 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:52:37 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/12 14:54:57 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/16 17:55:07 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*one_file_input(char	*input)
-{
-	int	x;
-
-	x = 0;
-	while (input[x] != ' ' && input[x])
-	{
-		if (input[x] == '\'')
-		{
-			x++;
-			while (input[x] != '\'')
-				x++;
-		}
-		else if (input[x] == '\"')
-		{
-			x++;
-			while (input[x] != '\"')
-				x++;
-		}
-		x++;
-	}
-	return (ft_substr(input, 0, x));
-}
-
 char	*redirect_output(t_minishell *minish, char *input, int x)
 {
 	char	*cmd;
-	char	*file_name;
+	char	*file;
 
 	cmd = ft_substr(input, 0, x);
-	printf("****%s****\n", input);
 	input += x + 1;
-	file_name = one_file_input(rm_late_sp(rm_early_sp(input)));
-	file_name = quotes_handler(ft_substr(file_name, 0,
-				check_metacharacters(file_name)), minish);
-	minish->w_fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+	file = who_file(input, minish);
+	minish->w_fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
 	if (minish->w_fd == -1)
 	{
 		print_error("minishell : no such file or directory:",
-			file_name, minish, 1);
+			file, minish, 1);
 		return (0);
 	}
 	minish->p = 1;
 	conditions(minish, cmd);
 	close(minish->w_fd);
-	x++;
 	x = check_metacharacters(input);
+	free(file);
 	if (!input[x])
+	{
+		free(cmd);
 		return (0);
+	}
 	return (ft_strjoin(cmd, input + x));
 }
 
 char	*redirect_input(t_minishell *minish, char *input, int x)
 {
 	char	*cmd;
-	char	*file_name;
+	char	*file;
 
 	cmd = ft_substr(input, 0, x);
 	input += x + 1;
-	file_name = one_file_input(rm_late_sp(rm_early_sp(input)));
-	file_name = quotes_handler(ft_substr(file_name, 0,
-				check_metacharacters(file_name)), minish);
-	minish->r_fd = open(file_name, O_RDWR, S_IRWXU);
+	file = who_file(input, minish);
+	minish->r_fd = open(file, O_RDWR, S_IRWXU);
 	if (minish->r_fd == -1)
 	{
-		print_error("minishell : no such file or directory:",
-			file_name, minish, 1);
+		ft_putstr_fd("minishell : ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putendl_fd(": no such file or directory:", 2);
 		return (0);
 	}
 	minish->p = 3;
 	conditions(minish, cmd);
 	close(minish->r_fd);
+	free(file);
 	x = check_metacharacters(input);
 	if (!input[x])
+	{
+		free(cmd);
 		return (0);
-	minish->p = 3;
+	}
 	return (ft_strjoin(cmd, input + x));
 }
 
 char	*redirect_append(t_minishell *minish, char *input, int x)
 {
 	char	*cmd;
-	char	*file_name;
+	char	*file;
 
-	cmd = ft_substr(input, 0, x - 1);
-	input += x + 1;
-	file_name = one_file_input(rm_late_sp(rm_early_sp(input)));
-	file_name = quotes_handler(ft_substr(file_name, 0,
-				check_metacharacters(file_name)), minish);
-	minish->w_fd = open(file_name, O_RDWR | O_APPEND | O_CREAT, S_IRWXU);
+	cmd = ft_substr(input, 0, x);
+	input += x + 2;
+	file = who_file(input, minish);
+	minish->w_fd = open(file, O_RDWR | O_APPEND | O_CREAT, S_IRWXU);
 	if (minish->w_fd == -1)
 	{
 		print_error("minishell : no such file or directory:",
-			file_name, minish, 1);
+			file, minish, 1);
 		return (0);
 	}
 	minish->p = 1;
 	conditions(minish, cmd);
 	close(minish->w_fd);
+	free(file);
 	x = check_metacharacters(input);
 	if (!input[x])
+	{
+		free(cmd);
 		return (0);
+	}
 	return (ft_strjoin(cmd, input + x));
+}
+
+void	check_input(t_minishell *minish, char *delim)
+{
+	char	*rd_input;
+
+	rd_input = NULL;
+	rd_input = readline("heredoc> ");
+	while (ft_strncmp(rd_input, delim, ft_strlen(delim) + 1) && rd_input)
+	{
+		ft_putendl_fd(rd_input, minish->w_fd);
+		free(rd_input);
+		rd_input = readline("heredoc> ");
+	}
+	free(rd_input);
 }
 
 char	*delimiter_input(t_minishell *minish, char *input, int x)
@@ -122,31 +117,25 @@ char	*delimiter_input(t_minishell *minish, char *input, int x)
 	char	*cmd;
 	char	*delimiter;
 	char	*rd_input;
-	int		fd[2];
 
-	cmd = ft_substr(input, 0, x - 1);
-	input += x + 1;
-	delimiter = one_file_input(rm_late_sp(rm_early_sp(input)));
-	delimiter = quotes_handler(ft_substr(delimiter, 0,
-				check_metacharacters(delimiter)), minish);
+	cmd = ft_substr(input, 0, x);
+	input += x + 2;
+	delimiter = who_file(input, minish);
 	rd_input = NULL;
-	pipe(fd);
-	minish->r_fd = fd[0];
-	rd_input = readline("heredoc> ");
-	while (ft_strncmp(rd_input, delimiter, ft_strlen(delimiter) + 1))
-	{
-		ft_putendl_fd(rd_input, fd[1]);
-		free(rd_input);
-		rd_input = readline("heredoc> ");
-	}
-	free(rd_input);
+	minish->w_fd = open("tmp", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+	check_input(minish, delimiter);
+	close(minish->w_fd);
 	minish->p = 3;
-	// conditions(minish, cmd);
+	minish->r_fd = open("tmp", O_RDWR, S_IRWXU);
+	minish->w_fd = 1;
+	conditions(minish, cmd);
 	close(minish->r_fd);
-	close(fd[1]);
+	free(delimiter);
 	x = check_metacharacters(input);
 	if (!input[x])
+	{
+		free(cmd);
 		return (0);
+	}
 	return (ft_strjoin(cmd, input + x));
 }
-//ARGS CAN BE AFTER NAME FILE IN REDIRECIONS

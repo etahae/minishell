@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 08:57:42 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/13 15:04:26 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/14 23:59:32 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,24 +46,14 @@ int	check_metacharacters(char *input)
 	i = get_metacharacters(input);
 	if (!input[i])
 		return (i);
-	if (input[i] == '>')
-	{
-		if (input[i + 1] == '>')
-			i++;
-	}
-	else if (input[i] == '<')
-	{
-		if (input[i + 1] == '<')
-			i++;
-	}
 	if (!(ft_isalnum(input[i + 1]) || input[i + 1] == '\''
 			|| input[i + 1] == '\"' || input[i + 1] == '$'
-			|| input[i + 1] == ' '))
+			|| input[i + 1] == ' '
+			|| (input[i + 1] == '>' && input[i + 2] != '>')
+			|| (input[i + 1] == '<' && input[i + 2] != '<')))
 		return (0);
 	return (i);
 }
-
-/////// while x + 1 to increment input after to let it pass spaces
 
 void	pipex(char *input, t_minishell *minish, int *x)
 {
@@ -95,7 +85,7 @@ int	metacharacters(char *input, t_minishell *minish)
 			print_error("minishell: parse error", NULL, minish, 130);
 		else if (input[x] == '>')
 		{
-			if (input[x] == '>' && input[x - 1] == '>')
+			if (input[x] == '>' && input[x + 1] == '>')
 				input = redirect_append(minish, input, x);
 			else
 				input = redirect_output(minish, input, x);
@@ -105,7 +95,7 @@ int	metacharacters(char *input, t_minishell *minish)
 		}
 		else if (input[x] == '<')
 		{
-			if (input[x] == '<' && input[x - 1] == '<')
+			if (input[x] == '<' && input[x + 1] == '<')
 				input = delimiter_input(minish, input, x);
 			else
 				input = redirect_input(minish, input, x);

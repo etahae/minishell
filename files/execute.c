@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 17:04:25 by tnamir            #+#    #+#             */
-/*   Updated: 2022/04/11 17:01:44 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/16 18:01:00 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static char	*check_access(char *cmd, char **all_paths)
 		if (!access(cmd_path, F_OK) && !access(cmd_path, X_OK))
 		{
 			twod_free(all_paths);
+			free(cmd);
 			return (cmd_path);
 		}
 		free(cmd_path);
@@ -75,8 +76,6 @@ static void	fd_hand(t_minishell *minish)
 		dup2(minish->r_fd, 0);
 		close(minish->r_fd);
 	}
-	if (minish->p == 3 || minish->p == 2)
-		dup2(minish->r_fd, 0);
 }
 
 void	execute(char *cmd, t_minishell *minish, char **argv)
