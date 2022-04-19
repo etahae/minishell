@@ -6,7 +6,7 @@
 /*   By: tnamir <tnamir@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:52:37 by mbenkhat          #+#    #+#             */
-/*   Updated: 2022/04/16 17:55:07 by tnamir           ###   ########.fr       */
+/*   Updated: 2022/04/17 22:56:59 by tnamir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*redirect_output(t_minishell *minish, char *input, int x)
 		free(cmd);
 		return (0);
 	}
-	return (ft_strjoin(cmd, input + x));
+	return (redirect_strjoin(cmd, input + x));
 }
 
 char	*redirect_input(t_minishell *minish, char *input, int x)
@@ -66,7 +66,7 @@ char	*redirect_input(t_minishell *minish, char *input, int x)
 		free(cmd);
 		return (0);
 	}
-	return (ft_strjoin(cmd, input + x));
+	return (redirect_strjoin(cmd, input + x));
 }
 
 char	*redirect_append(t_minishell *minish, char *input, int x)
@@ -94,7 +94,7 @@ char	*redirect_append(t_minishell *minish, char *input, int x)
 		free(cmd);
 		return (0);
 	}
-	return (ft_strjoin(cmd, input + x));
+	return (redirect_strjoin(cmd, input + x));
 }
 
 void	check_input(t_minishell *minish, char *delim)
@@ -122,11 +122,11 @@ char	*delimiter_input(t_minishell *minish, char *input, int x)
 	input += x + 2;
 	delimiter = who_file(input, minish);
 	rd_input = NULL;
-	minish->w_fd = open("tmp", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+	minish->w_fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
 	check_input(minish, delimiter);
 	close(minish->w_fd);
 	minish->p = 3;
-	minish->r_fd = open("tmp", O_RDWR, S_IRWXU);
+	minish->r_fd = open("/tmp/minishell", O_RDWR, S_IRWXU);
 	minish->w_fd = 1;
 	conditions(minish, cmd);
 	close(minish->r_fd);
@@ -137,5 +137,5 @@ char	*delimiter_input(t_minishell *minish, char *input, int x)
 		free(cmd);
 		return (0);
 	}
-	return (ft_strjoin(cmd, input + x));
+	return (redirect_strjoin(cmd, input + x));
 }
